@@ -14,6 +14,7 @@ import Cocoa
 import UIKit
 #endif
 
+@objc(StringArrayTransformer)
 public class StringArrayTransformer: ValueTransformer {
     override public class func transformedValueClass() -> AnyClass {
         return NSData.self
