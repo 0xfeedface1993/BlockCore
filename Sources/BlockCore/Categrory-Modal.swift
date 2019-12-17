@@ -9,8 +9,8 @@
 import Foundation
 
 public struct ListCategrory : Codable {
-    var name : String
-    var segue : String
-    var image : String
-    var site : String
+    public var name : String
+    public var segue : String
+    public var image : String
+    public var site : String
 }

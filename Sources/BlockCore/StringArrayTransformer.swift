@@ -14,16 +14,16 @@ import Cocoa
 import UIKit
 #endif
 
-class StringArrayTransformer: ValueTransformer {
-    override class func transformedValueClass() -> AnyClass {
+public class StringArrayTransformer: ValueTransformer {
+    override public class func transformedValueClass() -> AnyClass {
         return NSData.self
     }
     
-    override class func allowsReverseTransformation() -> Bool {
+    override public class func allowsReverseTransformation() -> Bool {
         return true
     }
     
-    override func transformedValue(_ value: Any?) -> Any? {
+    override public func transformedValue(_ value: Any?) -> Any? {
         guard let value = value as? Data else { return nil }
         do {
             let items = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(value)
@@ -34,7 +34,7 @@ class StringArrayTransformer: ValueTransformer {
         }
     }
     
-    override func reverseTransformedValue(_ value: Any?) -> Any? {
+    override public func reverseTransformedValue(_ value: Any?) -> Any? {
         guard let value = value as? [String] else { return nil }
         do {
             let items = try NSKeyedArchiver.archivedData(withRootObject: value, requiringSecureCoding: false)

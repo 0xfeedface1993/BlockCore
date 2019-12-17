@@ -9,80 +9,80 @@
 import Foundation
 //import Gzip
 
-typealias ParserMaker = (String) -> ContentInfo
-typealias AsyncFinish = () -> Void
+public typealias ParserMaker = (String) -> ContentInfo
+public typealias AsyncFinish = () -> Void
 
-enum Host: String {
+public enum Host: String {
     case dytt = "www.ygdy8.net"
     case sex8 = "www.duoduosiwa.site"
 }
 
 
 /// 演员导演信息
-struct Creator {
-    var name : String
-    var english : String
+public struct Creator {
+    public var name : String
+    public var english : String
 }
 
 /// 列表页面链接信息
-struct FetchURL : Equatable {
-    var site : String
-    var page : Int
-    var maker : (FetchURL) -> String
-    var url : URL {
+public struct FetchURL : Equatable {
+    public var site : String
+    public var page : Int
+    public var maker : (FetchURL) -> String
+    public var url : URL {
         get {
             return URL(string: maker(self))!;
         }
     }
     
-    static func ==(lhs: FetchURL, rhs: FetchURL) -> Bool {
+    public static func ==(lhs: FetchURL, rhs: FetchURL) -> Bool {
         return lhs.url == rhs.url
     }
 }
 
 /// 抓取内容页面信息模型
-struct ContentInfo : Equatable {
-    var title : String
-    var page : String
-    var msk : String
-    var time : String
-    var size : String
-    var format : String
-    var passwod : String
-    var titleMD5 : String {
+public struct ContentInfo : Equatable {
+    public var title : String
+    public var page : String
+    public var msk : String
+    public var time : String
+    public var size : String
+    public var format : String
+    public var passwod : String
+    public var titleMD5 : String {
         return title.md5()
     }
-    var downloafLink : [String]
-    var imageLink : [String]
+    public var downloafLink : [String]
+    public var imageLink : [String]
     
     //    ◎译　　名　电锯惊魂8：竖锯/电锯惊魂8/夺魂锯：游戏重启(台)/恐惧斗室之狂魔再现(港)/电锯惊魂：遗产
-    var translateName : String
+    public var translateName : String
     //    ◎片　　名　Jigsaw
-    var movieRawName : String
+    public var movieRawName : String
     //    ◎年　　代　2017
-    var releaseYear : String
+    public var releaseYear : String
     //    ◎产　　地　美国
-    var produceLocation : String
+    public var produceLocation : String
     //    ◎类　　别　悬疑/惊悚/恐怖
-    var styles : [String]
+    public var styles : [String]
     //    ◎语　　言　英语
-    var languages : [String]
+    public var languages : [String]
     //    ◎字　　幕　中英双字幕
-    var subtitle : String
+    public var subtitle : String
     //    ◎上映日期　2017-10-27(美国)
-    var showTimeInfo : String
-    var fileFormart : String
+    public var showTimeInfo : String
+    public var fileFormart : String
     //    ◎文件格式　HD-RMVB
-    var videoSize : String
+    public var videoSize : String
     //    ◎视频尺寸　1280 x 720
-    var movieTime : String
+    public var movieTime : String
     //    ◎片　　长　91分钟
-    var directes : [Creator]
+    public var directes : [Creator]
     //    ◎导　　演　迈克尔·斯派瑞 Michael Spierig / 彼得·斯派瑞 Peter Spierig
-    var actors : [Creator]
+    public var actors : [Creator]
     //    ◎主　　演　马特·帕斯摩尔 Matt Passmore
     var _note : String
-    var note : String {
+    public var note : String {
         set {
             _note = newValue.replacingOccurrences(of: "</p>", with: "").replacingOccurrences(of: "<p>", with: "").replacingOccurrences(of: "<br /><br />", with: "\n").replacingOccurrences(of: "<br />", with: "\n").replacingOccurrences(of: "<br", with: "") //.removingHTMLEntities
         }
@@ -118,11 +118,11 @@ struct ContentInfo : Equatable {
         _note = ""
     }
     
-    static func ==(lhs: ContentInfo, rhs: ContentInfo) -> Bool {
+    public static func ==(lhs: ContentInfo, rhs: ContentInfo) -> Bool {
         return lhs.title == rhs.title && lhs.page == rhs.page
     }
     
-    func contain(keyword: String) -> Bool {
+    public func contain(keyword: String) -> Bool {
         return title.contains(keyword) ||
             translateName.contains(keyword) ||
             movieRawName.contains(keyword) ||
@@ -131,16 +131,16 @@ struct ContentInfo : Equatable {
     }
 }
 
-struct Site {
-    var host : Host
-    var parentUrl : URL
-    var categrory : ListCategrory?
-    var listRule : ParserTagRule
-    var contentRule : ParserTagRule
-    var listEncode : String.Encoding
-    var contentEncode : String.Encoding
+public struct Site {
+    public var host : Host
+    public var parentUrl : URL
+    public var categrory : ListCategrory?
+    public var listRule : ParserTagRule
+    public var contentRule : ParserTagRule
+    public var listEncode : String.Encoding
+    public var contentEncode : String.Encoding
     
-    init(parentUrl: URL,
+    public init(parentUrl: URL,
          listRule: ParserTagRule,
          contentRule: ParserTagRule,
          listEncode: String.Encoding,
@@ -154,7 +154,7 @@ struct Site {
         self.parentUrl = parentUrl
     }
     
-    func page(bySuffix suffix: Int) -> URL {
+    public func page(bySuffix suffix: Int) -> URL {
         switch self.host {
         case .dytt:
             return parentUrl.appendingPathComponent("list_23_\(suffix).html")
@@ -163,21 +163,21 @@ struct Site {
         }
     }
     
-    static let dytt = Site(parentUrl: URL(string: "http://www.ygdy8.net/html/gndy/dyzz")!,
+    public static let dytt = Site(parentUrl: URL(string: "http://www.ygdy8.net/html/gndy/dyzz")!,
                            listRule: PageRuleOption.mLink,
                            contentRule: PageRuleOption.mContent,
                            listEncode: String.Encoding(rawValue: CFStringConvertEncodingToNSStringEncoding(UInt32(CFStringEncodings.HZ_GB_2312.rawValue))),
                            contentEncode: String.Encoding(rawValue: CFStringConvertEncodingToNSStringEncoding(UInt32(CFStringEncodings.GB_18030_2000.rawValue))),
                            hostName: .dytt)
     
-    static let netdisk = Site(parentUrl: URL(string: "https://www.duoduosiwa.site")!,
+    public static let netdisk = Site(parentUrl: URL(string: "https://www.duoduosiwa.site")!,
                               listRule: PageRuleOption.link,
                               contentRule: PageRuleOption.content,
                               listEncode: .utf8,
                               contentEncode: .utf8,
                               hostName: .sex8)
     
-    var parserMaker: ParserMaker? {
+    public var parserMaker: ParserMaker? {
         get {
             switch self.host {
             case .dytt:
@@ -347,7 +347,7 @@ struct Site {
 }
 
 /// 内容信息正则规则选项
-struct InfoRuleOption {
+public struct InfoRuleOption {
     static let netdiskTitle = ParserTagRule(tag: "", isTagPaser: false, attrubutes: [], inTagRegexString: "<span id=\"thread_subject\">", hasSuffix: nil, innerRegex: "[^<]*")
     /// 是否有码
     static let msk = ParserTagRule(tag: "", isTagPaser: false, attrubutes: [], inTagRegexString: "((【是否有码】)|(【有碼無碼】)|(【影片说明】)|(【影片說明】)|(【是否有碼】)){1}[：:]{0,1}((&nbsp;)|(\\s))*", hasSuffix: nil, innerRegex: "([^<：:(&nbsp;)])+")
@@ -417,7 +417,7 @@ struct InfoRuleOption {
 }
 
 /// 列表页面正则规则选项
-struct PageRuleOption {
+public struct PageRuleOption {
     /// 内容页面链接
     static let link = ParserTagRule(tag: "a", isTagPaser: false, attrubutes: [ParserAttrubuteRule(key: "href")], inTagRegexString: "<a \\w+=\"[^\"]+\" \\w+=\"\\w+\\(\\w+\\)\" \\w+=\"s xst\">", hasSuffix: "</a>", innerRegex: "[^<]+")
     static let content = ParserTagRule(tag: "", isTagPaser: false, attrubutes: [], inTagRegexString: "<tbody id=\"separatorline\">", hasSuffix: "下一页", innerRegex: "[\\s\\S]*")
@@ -428,7 +428,7 @@ struct PageRuleOption {
 }
 
 /// 自动抓取机器人
-class FetchBot {
+public class FetchBot {
     private lazy var session : URLSession = {
         let config = URLSessionConfiguration.default
         let queue = OperationQueue.current
@@ -437,20 +437,20 @@ class FetchBot {
     }()
     
     private static let _bot = FetchBot()
-    static var shareBot : FetchBot {
+    public static var shareBot : FetchBot {
         get {
             return _bot
         }
     }
     
-    var delegate : FetchBotDelegate?
-    var contentDatas = [ContentInfo]()
-    var runTasks = [FetchURL]()
-    var badTasks = [FetchURL]()
-    var startPage: UInt = 1
-    var pageOffset: UInt = 0
-    var count : Int = 0
-    var startTime : Date?
+    public var delegate : FetchBotDelegate?
+    public var contentDatas = [ContentInfo]()
+    public var runTasks = [FetchURL]()
+    public var badTasks = [FetchURL]()
+    public var startPage: UInt = 1
+    public var pageOffset: UInt = 0
+    public var count : Int = 0
+    public var startTime : Date?
     
     var sem : DispatchSemaphore?
     private var isRunning = false
@@ -460,12 +460,12 @@ class FetchBot {
     /// - Parameters:
     ///   - start: 开始页面，大于1
     ///   - offset: 结束页面 = start + offset
-    init(start: UInt = 1, offset: UInt = 0) {
+    public init(start: UInt = 1, offset: UInt = 0) {
         self.startPage = start > 0 ? start:1
         self.pageOffset = offset
     }
     
-    func start(withSite site: Site) {
+    public func start(withSite site: Site) {
         startTime = Date()
         runTasks.removeAll()
         badTasks.removeAll()
@@ -477,7 +477,7 @@ class FetchBot {
         fetchGroup(start: startPage, offset: pageOffset, site: site)
     }
     
-    func stop(compliention: AsyncFinish) {
+    public func stop(compliention: AsyncFinish) {
         if isRunning {
             sem = DispatchSemaphore(value: 0)
             sem?.wait()
@@ -656,7 +656,7 @@ class FetchBot {
     }
 }
 
-protocol FetchBotDelegate {
+public protocol FetchBotDelegate {
     func bot(_ bot: FetchBot, didLoardContent content: ContentInfo, atIndexPath index: Int)
     func bot(didStartBot bot: FetchBot)
     func bot(_ bot: FetchBot, didFinishedContents contents: [ContentInfo], failedLink : [FetchURL])
@@ -667,7 +667,7 @@ protocol FetchBotDelegate {
 ///
 /// - Parameter url: URL对象
 /// - Returns: URLRequest请求对象
-func browserRequest(url : URL, refer: String) -> URLRequest {
+public func browserRequest(url : URL, refer: String) -> URLRequest {
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     request.addValue("zh-CN,zh;q=0.8,en;q=0.6", forHTTPHeaderField: "Accept-Language")
@@ -680,7 +680,7 @@ func browserRequest(url : URL, refer: String) -> URLRequest {
     return request
 }
 
-extension Data {
+public extension Data {
     func asiicCombineUTF8StringDecode() -> String {
         var html = ""
         var index = 0

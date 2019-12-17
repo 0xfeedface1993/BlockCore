@@ -486,7 +486,7 @@ public extension CloudSaver {
     }
 }
 
-var stopFlag = false
+public var stopFlag = false
 
 
 // MARK: - 模型和记录实例之间转换

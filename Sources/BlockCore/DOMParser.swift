@@ -9,44 +9,44 @@
 import Foundation
 
 /// 顶层标签结构，包含标签名+属性名
-struct ParserTagRule {
-    var tag : String
-    var isTagPaser : Bool
-    var attrubutes : [ParserAttrubuteRule]
-    var inTagRegexString : String
-    var hasSuffix : String?
-    var innerRegex : String?
-    var prefix : String {
+public struct ParserTagRule {
+    public var tag : String
+    public var isTagPaser : Bool
+    public var attrubutes : [ParserAttrubuteRule]
+    public var inTagRegexString : String
+    public var hasSuffix : String?
+    public var innerRegex : String?
+    public var prefix : String {
         return isTagPaser ? "<\(tag)\(inTagRegexString)>":inTagRegexString
     }
-    var suffix : String {
+    public var suffix : String {
         return isTagPaser ? "</\(tag)>":(hasSuffix ?? "")
     }
-    var regex : String {
+    public var regex : String {
         return "\(prefix)\(innerRegex != nil ? innerRegex!:"[\\s\\S]*?")\(suffix)"
     }
 }
 
 
 /// 属性结构
-struct ParserAttrubuteRule {
-    var key : String
-    var prefix : String {
+public struct ParserAttrubuteRule {
+    public var key : String
+    public var prefix : String {
         return "\(key)=\""
     }
-    var suffix : String {
+    public var suffix : String {
         return "\""
     }
-    var regex : String {
+    public var regex : String {
         return "\(prefix)[^\"]*\(suffix)"
     }
 }
 
 
 /// 解析结果，内层字符串+抓取的属性名
-struct ParserResult {
-    var innerHTML : String
-    var attributes : [String:String]
+public struct ParserResult {
+    public var innerHTML : String
+    public var attributes : [String:String]
 }
 
 
@@ -56,7 +56,7 @@ struct ParserResult {
 ///   - string: HTML字符串
 ///   - rule: 需要抓取的标签结构
 /// - Returns:  解析结果（innerHTML和多个属性值）
-func parse(string: String, rule: ParserTagRule) -> [ParserResult]? {
+public func parse(string: String, rule: ParserTagRule) -> [ParserResult]? {
     var results = [ParserResult]()
     do {
         let tagRegex = try NSRegularExpression(pattern: rule.regex, options: .caseInsensitive)
