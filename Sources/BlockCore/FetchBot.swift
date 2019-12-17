@@ -656,7 +656,7 @@ public class FetchBot {
     }
 }
 
-public protocol FetchBotDelegate {
+public protocol FetchBotDelegate: class {
     func bot(_ bot: FetchBot, didLoardContent content: ContentInfo, atIndexPath index: Int)
     func bot(didStartBot bot: FetchBot)
     func bot(_ bot: FetchBot, didFinishedContents contents: [ContentInfo], failedLink : [FetchURL])
